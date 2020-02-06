@@ -1,0 +1,30 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+}
+
+group = 'com.nsoft.godfather.k8s.workshop'
+version = System.getenv("BUILD_VERSION") ?: 'dev-master'
+sourceCompatibility = '13'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    compile('io.springfox:springfox-swagger2:2.9.2')
+    compile('io.springfox:springfox-swagger-ui:2.9.2')
+
+    compile('com.fasterxml.jackson.core:jackson-core:2.10.0')
+    compile('com.fasterxml.jackson.core:jackson-annotations:2.10.0')
+}
