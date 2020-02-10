@@ -34,8 +34,7 @@ public class TodoResource {
     @GetMapping(value = "/")
     @ApiIgnore
     public ResponseEntity<Void> ingress() {
-        return ResponseEntity.status(HttpStatus.FOUND)
-                .location(URI.create("swagger-ui.html"))
+        return ResponseEntity.status(HttpStatus.OK)
                 .build();
     }
 
