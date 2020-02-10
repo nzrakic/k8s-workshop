@@ -4,12 +4,6 @@ MAINTAINER Nikola Rakić <rakic.nikola@nsoft.com>
 
 EXPOSE 8080
 
-ARG BUILD_VERSION=dev-master
-ARG BUILD_PATH=build/libs/rest
-ADD ${BUILD_PATH}-${BUILD_VERSION}.jar service.jar
+ADD build/libs/rest-dev-master.jar service.jar
 
-ENV SERVICE_JAR service.jar
-
-ADD "run.sh" "/run.sh"
-
-ENTRYPOINT ["/run.sh"]
+ENTRYPOINT ["java", "-jar", "service.jar"]
