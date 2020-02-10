@@ -11,7 +11,7 @@ metadata:
       name: {{ include "k8s-workshop.name" . }}
       prefix: {{ .Values.path}}
       host: {{ .Values.host }}
-      service: {{ include "k8s-workshop.name" . }}-ambassador-service:{{ .Values.service.port }}
+      service: {{ include "k8s-workshop.name" . }}-ambassador-service.{{ .Values.customConfig.namespace }}:{{ .Values.service.port }}
       ---
       apiVersion: ambassador/v1
       kind: TLSContext
