@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "k8s-workshop.fullname" . }}-stable
+  namespace: {{ .Values.customConfig.namespace }}
+  labels:
+    app: {{ include "k8s-workshop.name" . }}
+    app.kubernetes.io/name: {{ include "k8s-workshop.name" . }}
+    helm.sh/chart: {{ include "k8s-workshop.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    kube-score/ignore: pod-networkpolicy
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "k8s-workshop.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app: {{ include "k8s-workshop.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "k8s-workshop.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app: {{ include "k8s-workshop.name" . }}
+        release: {{ .Release.Name }}
+        track: stable
+        date: "{{ .Release.Time.Seconds }}"
+        version: v1
+      annotations:
+#        prometheus.io/scrape: "true"
+#        prometheus.io/path: "/metrics"
+#        prometheus.io/port: "{{ .Values.service.port }}"
+        fluentd.active: "true"
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.imageCredentials.name }}
+      containers:
+        - name: {{ include "k8s-workshop.fullname" . }}
+          image: {{ .Values.imageDetails.repository }}:{{ .Values.imageDetails.tag }}
+          imagePullPolicy: {{ .Values.imageDetails.pullPolicy }}
+          securityContext:
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsUser: 20000
+            runAsGroup: 20000
+            fsGroup: 20000
+          ports:
+          - containerPort: {{ .Values.service.port }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

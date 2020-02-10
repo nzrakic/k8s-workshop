@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "k8s-workshop.name" . }}-ambassador-service
+  namespace: {{ .Values.customConfig.namespace }}
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v1
+      kind: Mapping
+      name: {{ include "k8s-workshop.name" . }}
+      prefix: {{ .Values.path}}
+      host: {{ .Values.host }}
+      service: {{ include "k8s-workshop.name" . }}-ambassador-service:{{ .Values.service.port }}
+      ---
+      apiVersion: ambassador/v1
+      kind: TLSContext
+      name: {{ include "k8s-workshop.name" . }}-tlscontext
+      hosts:
+      - {{ .Values.host }}
+      secret: {{ .Values.certName }}.{{ .Values.customConfig.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "k8s-workshop.name" . }}-ambassador-service
+    helm.sh/chart: {{ include "k8s-workshop.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app: {{ include "k8s-workshop.name" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      name: http-{{ template "k8s-workshop.name" . }}
+  selector:
+    app.kubernetes.io/name: {{ include "k8s-workshop.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app: {{ include "k8s-workshop.name" . }}
+    release: {{ .Release.Name }}

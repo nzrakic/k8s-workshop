@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: monitor
+  name: {{ include "k8s-workshop.fullname" . }}-monitor
+spec:
+  selector:
+    matchExpressions:
+     - {key: app, operator: Exists}
+  namespaceSelector:
+    matchNames:
+      - {{ .Values.customConfig.namespace }}
+  endpoints:
+  - port: http-{{ include "k8s-workshop.name" . }}
+    interval: 15s

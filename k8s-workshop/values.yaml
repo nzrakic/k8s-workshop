@@ -1,0 +1,42 @@
+# Default values.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+env: staging
+replicaCount: 2
+hsMinReplicas: 2
+hsMaxReplicas: 10
+hsCpuAverageUtilization: 70
+hsKDEConnections: 50
+
+
+imageDetails:
+  repository: "docker-app.nsoft.com:10884/k8s-workshop-example"
+  tag: "ante"
+  pullPolicy: Always
+
+imageCredentials:
+  name: "docker-god-secret"
+  username: "jenkins.bot.god"
+  password: "JrM3mTLq4YGD"
+  registry: "docker-app.nsoft.com:10884"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+customConfig:
+  namespace: "dev-example"
+
+path: /
+certName: k8s-workshop-example-cert
+host: k8s-workshop-example.staging-ubercluster2.nsoft.cloud
+DNSEndpointAddress: 35.228.236.220
+
+resources: 
+  limits:
+    cpu: 200m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
