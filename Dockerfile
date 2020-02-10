@@ -1,4 +1,4 @@
-FROM openjdk:13.0.2-jdk-slim
+FROM adoptopenjdk/openjdk13:jre13u-alpine-nightly
 
 MAINTAINER Nikola Rakić <rakic.nikola@nsoft.com>
 
