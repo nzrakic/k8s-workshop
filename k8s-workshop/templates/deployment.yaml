@@ -45,7 +45,7 @@ spec:
           imagePullPolicy: {{ .Values.imageDetails.pullPolicy }}
           securityContext:
             privileged: false
-            readOnlyRootFilesystem: true
+            readOnlyRootFilesystem: false
             runAsUser: 20000
             runAsGroup: 20000
             fsGroup: 20000
