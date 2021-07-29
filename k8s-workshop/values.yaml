@@ -1,0 +1,42 @@
+# Default values.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+env: staging
+replicaCount: 2
+hsMinReplicas: 2
+hsMaxReplicas: 10
+hsCpuAverageUtilization: 70
+hsKDEConnections: 50
+
+
+imageDetails:
+  repository: "docker-app.nsoft.com:10884/rakic-todolist"
+  tag: "1.0.1"
+  pullPolicy: Always
+
+imageCredentials:
+  name: "docker-god-secret"
+  username: "workshop"
+  password: "workshop"
+  registry: "docker-app.nsoft.com:10884"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+customConfig:
+  namespace: "rakic-default"
+
+path: /
+certName: rakic-k8s-workshop-example-cert
+host: rakic.workshop.nsoft.cloud
+DNSEndpointAddress: 35.228.236.220
+
+resources: 
+  limits:
+    cpu: 200m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi

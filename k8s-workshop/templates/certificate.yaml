@@ -1,0 +1,15 @@
+{{ if not (eq .Values.env "local") }}
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  annotations:
+  name: {{ .Values.certName }}
+  namespace: {{ .Values.customConfig.namespace }}
+spec:
+  dnsNames:
+  - {{ .Values.host }}
+  issuerRef:
+    kind: ClusterIssuer
+    name: google-cluster-issuer
+  secretName: {{ .Values.certName }}
+{{ end }}

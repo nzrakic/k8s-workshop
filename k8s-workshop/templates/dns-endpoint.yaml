@@ -1,0 +1,13 @@
+{{ if not (eq .Values.env "local") }}
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: {{ include "k8s-workshop.name" . }}
+spec:
+  endpoints:
+  - dnsName: {{ .Values.host }}
+    recordTTL: 180
+    recordType: A
+    targets:
+    -  {{ .Values.DNSEndpointAddress }}
+{{ end }}
